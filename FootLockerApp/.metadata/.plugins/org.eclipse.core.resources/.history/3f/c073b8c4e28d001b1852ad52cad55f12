@@ -1,0 +1,5 @@
+package com.dwprojects.repository;
+
+public interface UserRepository {
+
+}
