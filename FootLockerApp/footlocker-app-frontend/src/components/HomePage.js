@@ -5,6 +5,11 @@ function HomePage({ onLogout }) {
     const [orders, setOrders] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState('');
+    const [stats, setStats] = useState({
+        totalOrders: 0,
+        totalRevenue: 0,
+        averageOrderValue: 0
+    });
     const user = JSON.parse(localStorage.getItem('user'));
 
     useEffect(() => {
@@ -33,6 +38,16 @@ function HomePage({ onLogout }) {
 
                 setProducts(productsData);
                 setOrders(invoicesData);
+
+                // Calculate statistics
+                if (invoicesData.length > 0) {
+                    const totalRevenue = invoicesData.reduce((sum, order) => sum + order.total_price, 0);
+                    setStats({
+                        totalOrders: invoicesData.length,
+                        totalRevenue: totalRevenue,
+                        averageOrderValue: totalRevenue / invoicesData.length
+                    });
+                }
             } catch (err) {
                 console.error('Error fetching data:', err);
                 setError('Failed to load data. Please try again later.');
@@ -47,7 +62,10 @@ function HomePage({ onLogout }) {
     return (
         <div className="home-page">
             <header className="home-header">
-                <h1>Welcome, {user.first_name}!</h1>
+                <div className="header-content">
+                    <h1>Welcome, {user.first_name}!</h1>
+                    <span className="role-badge">{user.owner ? 'Owner' : 'Staff Member'}</span>
+                </div>
                 <button 
                     className="logout-button"
                     onClick={() => {
@@ -66,7 +84,7 @@ function HomePage({ onLogout }) {
             )}
             
             <div className="dashboard-grid">
-                <div className="dashboard-card">
+                <div className="dashboard-card profile-card">
                     <h2>Your Profile</h2>
                     <div className="info-card">
                         <div className="info-row">
@@ -80,6 +98,24 @@ function HomePage({ onLogout }) {
                         <div className="info-row">
                             <label>Role:</label>
                             <span>{user.owner ? 'Owner' : 'Staff Member'}</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div className="dashboard-card stats-card">
+                    <h2>Statistics</h2>
+                    <div className="stats-grid">
+                        <div className="stat-item">
+                            <span className="stat-value">{stats.totalOrders}</span>
+                            <span className="stat-label">Total Orders</span>
+                        </div>
+                        <div className="stat-item">
+                            <span className="stat-value">${stats.totalRevenue.toFixed(2)}</span>
+                            <span className="stat-label">Total Revenue</span>
+                        </div>
+                        <div className="stat-item">
+                            <span className="stat-value">${stats.averageOrderValue.toFixed(2)}</span>
+                            <span className="stat-label">Avg. Order Value</span>
                         </div>
                     </div>
                 </div>
