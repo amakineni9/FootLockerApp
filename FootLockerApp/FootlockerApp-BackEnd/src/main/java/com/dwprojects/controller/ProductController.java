@@ -10,7 +10,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/products")
-@CrossOrigin(origins = "http://localhost:3000")
+@CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true", maxAge = 3600)
 public class ProductController {
 
     @Autowired
@@ -28,14 +28,14 @@ public class ProductController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    @GetMapping("/brand/{brandId}")
-    public List<Products> getProductsByBrand(@PathVariable int brandId) {
-        return productService.getProductsByBrandId(brandId);
-    }
-
     @GetMapping("/type/{typeId}")
     public List<Products> getProductsByType(@PathVariable int typeId) {
-        return productService.getProductsByTypeId(typeId);
+        return productService.getProductsByType(typeId);
+    }
+
+    @GetMapping("/brand/{brandId}")
+    public List<Products> getProductsByBrand(@PathVariable int brandId) {
+        return productService.getProductsByBrand(brandId);
     }
 
     @PostMapping

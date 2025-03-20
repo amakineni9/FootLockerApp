@@ -25,14 +25,14 @@ public class ProductService {
         return productRepository.findById(id);
     }
     
-    @Cacheable(value = "products", key = "'brand:' + #brandId")
-    public List<Products> getProductsByBrandId(int brandId) {
-        return productRepository.findByBrandId(brandId);
+    @Cacheable(value = "products", key = "'type:' + #typeId")
+    public List<Products> getProductsByType(int typeId) {
+        return productRepository.findByProductTypeId(typeId);
     }
     
-    @Cacheable(value = "products", key = "'type:' + #typeId")
-    public List<Products> getProductsByTypeId(int typeId) {
-        return productRepository.findByProductTypeId(typeId);
+    @Cacheable(value = "products", key = "'brand:' + #brandId")
+    public List<Products> getProductsByBrand(int brandId) {
+        return productRepository.findByBrandId(brandId);
     }
     
     @CacheEvict(value = "products", allEntries = true)

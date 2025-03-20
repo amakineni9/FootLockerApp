@@ -7,10 +7,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/users")
-@CrossOrigin(origins = "http://localhost:3000")
+@CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true", maxAge = 3600)
 public class UserController {
 
     @Autowired
@@ -54,9 +55,22 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<User> login(@RequestBody User loginUser) {
-        return userService.findByEmailAndPassword(loginUser.getEmail(), loginUser.getPassword())
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+    public ResponseEntity<Map<String, Object>> login(@RequestBody User loginUser) {
+        try {
+            return userService.findByEmailAndPassword(loginUser.getEmail(), loginUser.getPassword())
+                    .map(user -> ResponseEntity.ok(Map.of(
+                        "success", true,
+                        "user", user
+                    )))
+                    .orElse(ResponseEntity.status(401).body(Map.of(
+                        "success", false,
+                        "message", "Invalid email or password"
+                    )));
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body(Map.of(
+                "success", false,
+                "message", "Server error: " + e.getMessage()
+            ));
+        }
     }
 }

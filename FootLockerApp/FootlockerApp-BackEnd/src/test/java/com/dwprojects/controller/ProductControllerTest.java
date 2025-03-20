@@ -92,7 +92,7 @@ public class ProductControllerTest {
     }
 
     @Test
-    public void getProductsByBrand_ShouldReturnList() throws Exception {
+    public void getProductsByBrandId_ShouldReturnList() throws Exception {
         given(productService.getProductsByBrandId(1)).willReturn(productList);
 
         mockMvc.perform(get("/api/products/brand/1"))
@@ -103,7 +103,7 @@ public class ProductControllerTest {
     }
 
     @Test
-    public void getProductsByType_ShouldReturnList() throws Exception {
+    public void getProductsByTypeId_ShouldReturnList() throws Exception {
         given(productService.getProductsByTypeId(1)).willReturn(productList);
 
         mockMvc.perform(get("/api/products/type/1"))

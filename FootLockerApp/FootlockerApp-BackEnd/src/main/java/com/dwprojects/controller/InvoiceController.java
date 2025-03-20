@@ -13,7 +13,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/invoices")
-@CrossOrigin(origins = "http://localhost:3000")
+@CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true", maxAge = 3600)
 public class InvoiceController {
 
     @Autowired
@@ -32,12 +32,12 @@ public class InvoiceController {
     }
 
     @GetMapping("/store/{storeId}")
-    public List<Invoices> getInvoicesByStore(@PathVariable int storeId) {
+    public List<Invoices> getInvoicesByStoreId(@PathVariable int storeId) {
         return invoiceService.getInvoicesByStoreId(storeId);
     }
 
     @GetMapping("/user/{userId}")
-    public List<Invoices> getInvoicesByUser(@PathVariable int userId) {
+    public List<Invoices> getInvoicesByUserId(@PathVariable int userId) {
         return invoiceService.getInvoicesByUserId(userId);
     }
 
